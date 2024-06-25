@@ -1,5 +1,5 @@
 # Introducción al curso de desarrollo de aplicaciones con Ionic Framework
-###Comfenalco Santander
+### Comfenalco Santander
 
 Requisitos para tomar el curso:
 - Manejar HTML
