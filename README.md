@@ -5,4 +5,4 @@ Requisitos para tomar el curso:
 - Manejar HTML
 - Manejar CSS
 - Manejar JavaScript
-- Manejar TypeScript
+- Manejar los básico de TypeScript
