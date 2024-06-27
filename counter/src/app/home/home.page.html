@@ -1,0 +1,24 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Mi Primer App
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="noScroll">
+  <ion-button expand="block" size="large" color="secondary" (click)="up()">
+    <ion-icon name="add-circle-outline"></ion-icon>
+  </ion-button>
+
+  <div id="numbers">
+    {{ showNumber }}
+  </div>
+  
+</ion-content>
+
+<ion-footer>
+  <ion-button expand="block" size="large" color="secondary" (click) ="down()" [disabled] = "counter == 0">
+    <ion-icon name="remove-circle-outline"></ion-icon>
+  </ion-button>
+</ion-footer>
