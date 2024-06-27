@@ -1,0 +1,26 @@
+<ion-header [translucent]="true" >
+  <ion-toolbar>
+    <ion-title>Counter App</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <h1>Content</h1>
+</ion-content>
+
+<ion-content [fullscreen]="true">
+
+  <ion-button expand="block" size="large" id="btnBottom2"  color="success" (click)="up()" [disabled]="counter===99">
+    <ion-icon name="add-outline"></ion-icon>
+  </ion-button>
+  
+  <div id="number">
+    {{ showNumber}}
+  </div>
+
+</ion-content>
+
+<ion-footer>
+  <ion-button expand="block" size="large"  color="danger" (click)="down()"  [disabled]="counter===0">
+    <ion-icon name="remove-outline"></ion-icon>
+  </ion-button>
+</ion-footer>
