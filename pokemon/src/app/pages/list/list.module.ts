@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { ListPageRoutingModule } from './list-routing.module';
 
 import { ListPage } from './list.page';
+import { MayusculaPipe } from 'src/app/pipes/mayuscula.pipe';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ListPageRoutingModule
+    ListPageRoutingModule,
+    MayusculaPipe
   ],
   declarations: [ListPage]
 })

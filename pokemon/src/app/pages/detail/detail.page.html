@@ -10,7 +10,7 @@
     <ion-img [src]="pokemon.sprite"></ion-img>
     <ion-card-header class="ion-text-center">
       <ion-card-title class="ion-text-capitalize">
-        {{ pokemon.name }}
+        {{ pokemon.name | uppercase }}
       </ion-card-title>
     </ion-card-header>
     <ion-card-content>
@@ -116,6 +116,14 @@
         </ion-grid>
     </ion-card-content>
   </ion-card>
+
+  <p>
+    {{ today  | date:"dd/MM/yyyy"}}
+  </p>
+
+  <pre>
+    {{ users | json }}
+  </pre>
 
 
   <ion-fab slot="fixed" horizontal="end" vertical="bottom">

@@ -10,6 +10,13 @@ import { Pokemon } from 'src/app/model/pokemon';
 export class DetailPage implements OnInit {
 
   public pokemon: Pokemon;
+  public today = new Date();
+  public users = [
+    'miguel',
+    'jhoan',
+    'sandra',
+    'camilo'
+  ];
 
   constructor(private navParams: NavParams, private navCtrl: NavController) { 
     this.pokemon = this.navParams.data['pokemon'];

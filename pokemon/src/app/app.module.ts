@@ -8,10 +8,11 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
 import { UpperCasePipe } from '@angular/common';
+import { MayusculaPipe } from './pipes/mayuscula.pipe';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, UpperCasePipe],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, UpperCasePipe, MayusculaPipe],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, 
     NavParams, 
