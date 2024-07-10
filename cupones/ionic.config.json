@@ -1,0 +1,7 @@
+{
+  "name": "cupones",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

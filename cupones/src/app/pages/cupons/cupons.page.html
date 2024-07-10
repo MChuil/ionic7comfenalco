@@ -1,0 +1,39 @@
+<ion-header [translucent]="true" *ngIf="!showCamera">
+  <ion-toolbar>
+    <ion-title>Cupones</ion-title>
+    <ion-item lines="none" slot="end" (click)="startCamera()">
+      <ion-icon name="camera-outline"></ion-icon>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" *ngIf="!showCamera">
+  <ion-card *ngFor="let cupon of cupons; let last=last" [ngClass]="{'margin-last': last}">
+    <img [alt]="cupon.name" [src]="cupon.img" />
+    <ion-card-header>
+      <ion-card-title>{{ cupon.name }}</ion-card-title>
+    </ion-card-header>
+    
+    <ion-card-content>
+      <ion-item lines="none">
+        <ion-label>{{ cupon.discount }} %</ion-label>
+        <ion-button slot="end" (click)="changeActive(cupon)">
+            {{ cupon.active ? 'Desactivar' : 'Activar' }}
+        </ion-button>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+
+  <ion-fab horizontal="start" vertical="bottom" slot="fixed">
+    <ion-fab-button (click)="goToCard()" [disabled]="!cuponsActive">
+      <ion-icon name="card-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
+
+<ion-fab horizontal="start" vertical="bottom" slot="fixed" *ngIf="showCamera">
+  <ion-fab-button (click)="closeCamera()">
+    <ion-icon name="close-outline"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
