@@ -1,0 +1,28 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Mi lista de compras
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-item>
+    <ion-input label="Nuevo item" type="text" name="item" [(ngModel)]="item"></ion-input>
+    <ion-button (click)="addItem()" [disabled] = "!item">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-button>
+  </ion-item>
+  <!-- <ion-button id="showAlert" size="full">Alerta</ion-button>
+
+  <ion-alert
+      trigger="showAlert"
+      header="Encabezado de la la alerta"
+      subHeader="Sub encabezado"
+      message="Hola soy un alerta"
+      [buttons]="alertButtons"
+    ></ion-alert> -->
+
+    <!-- <ion-button size="block" (click)="mostrarAlerta()">Alerta 2</ion-button> -->
+</ion-content>
