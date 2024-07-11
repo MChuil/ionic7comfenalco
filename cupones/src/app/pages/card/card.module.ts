@@ -8,7 +8,7 @@ import { CardPageRoutingModule } from './card-routing.module';
 
 import { CardPage } from './card.page';
 
-import { QRCodeModule } from 'angularx-qrcode';
+import { QrCodeModule } from 'ng-qrcode';
 
 @NgModule({
   imports: [
@@ -16,7 +16,7 @@ import { QRCodeModule } from 'angularx-qrcode';
     FormsModule,
     IonicModule,
     CardPageRoutingModule,
-    QRCodeModule
+    QrCodeModule
   ],
   declarations: [CardPage]
 })
