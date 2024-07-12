@@ -1,0 +1,169 @@
+{
+    "database": "class.db",
+    "version": 1,
+    "encrypted": false,
+    "mode": "full",
+    "tables" :[
+        {
+            "name": "students",
+            "schema": [
+                {
+                    "column": "id",
+                    "value": "INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT"
+                },
+                {
+                    "column": "name",
+                    "value": "TEXT NOT NULL"
+                },
+                {
+                    "column":"surname",
+                    "value": "TEXT NOT NULL"
+                },
+                {
+                    "column": "email",
+                    "value": "TEXT NOT NULL"
+                },
+                {
+                    "column": "phone",
+                    "value": "TEXT NOT NULL"
+                },
+                {
+                    "column": "active",
+                    "value": "INTEGER DEFAULT 1"
+                }
+            ],
+            "values": [
+                [
+                    1,
+                    "Miguel",
+                    "Chuil",
+                    "miguel@test.com",
+                    "9661012323",
+                    1
+                ],
+                [
+                    2,
+                    "Laura",
+                    "Vera",
+                    "laura@test.com",
+                    "9661234567",
+                    1
+                ],
+                [
+                    3,
+                    "Estefany",
+                    "Chuil",
+                    "fany@test.com",
+                    "9669876543",
+                    1
+                ]
+            ]
+        },
+        {
+            "name": "class",
+            "schema": [
+                {
+                    "column": "id",
+                    "value": "INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT"
+                },
+                {
+                    "column": "date_start",
+                    "value": "TEXT"
+                },
+                {
+                    "column":"date_end",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "id_student",
+                    "value": "INTEGER NOT NULL"
+                },
+                {
+                    "column": "price",
+                    "value": "REAL NOT NULL"
+                },
+                {
+                    "column": "active",
+                    "value": "INTEGER DEFAULT 1"
+                },
+                {
+                    "foreignkey": "id_student",
+                    "value": "REFERENCES students(id)"
+                }
+            ],
+            "values": [
+                [
+                    1,
+                    "2024-07-09T16:00",
+                    "2024-07-09T19:00",
+                    1,
+                    15,
+                    1
+                ],
+                [
+                    2,
+                    "2024-07-10T16:00",
+                    "2024-07-10T19:00",
+                    2,
+                    10,
+                    1
+                ],
+                [
+                    3,
+                    "2024-07-11T16:00",
+                    "2024-07-11T19:00",
+                    3,
+                    15,
+                    1
+                ]
+            ] 
+        },
+        {
+            "name": "payments",
+            "schema": [
+                {
+                    "column": "id",
+                    "value": "INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT"
+                },
+                {
+                    "column": "date",
+                    "value": "TEXT"
+                },
+                {
+                    "column":"id_class",
+                    "value": "INTEGER NOT NULL"
+                },
+                {
+                    "column": "paid",
+                    "value": "REAL DEFAULT 0"
+                },
+                {
+                    "foreignkey": "id_class",
+                    "value": "REFERENCES class(id)"
+                }
+            ],
+            "values": [
+                [
+                    1,
+                    "2024-07-09T16:00",
+                    1,
+                    1
+
+                ],
+                [
+                    2,
+                    null,
+                    2,
+                    0
+
+                ],
+                [
+                    3,
+                    null,
+                    3,
+                    0
+                ]
+            ] 
+        }
+    ]
+}
