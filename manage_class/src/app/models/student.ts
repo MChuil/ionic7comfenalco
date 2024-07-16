@@ -4,5 +4,5 @@ export class Student {
     surname: string;
     email: string;
     phone: string;
-    acrtive: number;
+    active: number;
 }
