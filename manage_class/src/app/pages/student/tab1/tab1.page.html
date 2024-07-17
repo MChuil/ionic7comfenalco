@@ -1,0 +1,64 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Alumnos
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  
+  <ion-grid class="ion-margin-top ion-padding">
+    <ion-row *ngIf="students && students.length == 0">
+        <ion-col class="ion-text-center">
+          <ion-text>No hay alumnos registrados</ion-text>
+        </ion-col>
+    </ion-row>
+    
+    <div *ngIf="!showForm">
+      <ion-row>
+        <ion-col>
+          <ion-searchbar 
+            [debounce]="1000"
+            search-icon="search-circle"
+            placeholder = "Buscar..."
+            color="light"
+            (ionInput)="searchStudent($event)"></ion-searchbar>
+        </ion-col>
+      </ion-row>
+  
+      <ion-row *ngFor="let row of students">
+        <ion-col>
+          <ion-item>
+            {{ row.name }} {{ row.surname }}
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <ion-row *ngIf="showForm">
+      <form (ngSubmit)="createUpdateStudent()">
+        <ion-item>
+          <ion-input label="Nombre" type="text" name="name" [(ngModel)]="name"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Apellidos" type="text" name="surname" [(ngModel)]="surname"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Correo" type="text" name="email" [(ngModel)]="email"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Telefono" type="text" name="phone" [(ngModel)]="phone"></ion-input>
+        </ion-item>
+        <ion-button type="submit" (click)="onCloseForm()">Añadir estudiante</ion-button>
+      </form>
+    </ion-row>
+  </ion-grid>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" *ngIf="!showForm">
+    <ion-fab-button (click)="onShowForm()" size="small">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

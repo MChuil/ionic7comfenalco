@@ -1,5 +1,5 @@
 {
-  "name": "cupones",
+  "name": "manage_class",
   "version": "0.0.1",
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
@@ -9,7 +9,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "copysqlwasm": "copyfiles -u 3 node_modules/sql.js/dist/sql-wasm1.wasm src/assets"
   },
   "private": true,
   "dependencies": {
@@ -21,17 +22,19 @@
     "@angular/platform-browser": "^18.0.0",
     "@angular/platform-browser-dynamic": "^18.0.0",
     "@angular/router": "^18.0.0",
-    "@capacitor-mlkit/barcode-scanning": "^6.1.0",
-    "@capacitor/android": "6.1.0",
+    "@capacitor-community/sqlite": "^6.0.1",
     "@capacitor/app": "6.0.0",
     "@capacitor/core": "6.1.0",
+    "@capacitor/device": "^6.0.0",
     "@capacitor/haptics": "6.0.0",
     "@capacitor/keyboard": "6.0.1",
+    "@capacitor/preferences": "^6.0.1",
     "@capacitor/status-bar": "6.0.0",
     "@ionic/angular": "^8.0.0",
     "ionicons": "^7.0.0",
-    "ng-qrcode": "^18.0.0",
+    "jeep-sqlite": "^2.7.2",
     "rxjs": "~7.8.0",
+    "sql.js": "^1.10.3",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"
   },
@@ -51,6 +54,7 @@
     "@types/jasmine": "~5.1.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
+    "copyfiles": "^2.4.1",
     "eslint": "^8.57.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsdoc": "^48.2.1",

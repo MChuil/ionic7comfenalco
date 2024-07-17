@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 
-import { QRCodeModule } from 'angularx-qrcode';
+import { QrCodeModule } from 'ng-qrcode';
 
 import { IonicModule, IonicRouteStrategy, NavParams } from '@ionic/angular';
 
@@ -15,7 +15,7 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserModule, 
     IonicModule.forRoot(), 
     AppRoutingModule,
-    QRCodeModule
+    QrCodeModule
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, NavParams],
   bootstrap: [AppComponent],

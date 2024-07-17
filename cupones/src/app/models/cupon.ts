@@ -1,5 +1,5 @@
 export class Cupon{
-    idProduct: number;
+    id_product: number;
     img: string;
     name: string;
     discount: number;
