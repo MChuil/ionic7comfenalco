@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { CapacitorSQLite, capSQLiteValues, JsonSQLite } from '@capacitor-community/sqlite';
+import { CapacitorSQLite, capSQLiteChanges, capSQLiteValues, JsonSQLite } from '@capacitor-community/sqlite';
 import { Device } from '@capacitor/device';
 import { Preferences } from '@capacitor/preferences';
 import { AlertController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Student } from '../models/student';
+import { Statement } from '@angular/compiler';
+import { Classes } from '../models/classes';
 
 @Injectable({
   providedIn: 'root'
@@ -107,4 +109,99 @@ export class SqliteManagerService {
       return Promise.resolve(students);
     }).catch(error => Promise.reject(error))
   }
+
+
+  async createStudent(student: Student){
+    let sql = 'INSERT INTO students (name, surname, email, phone) VALUES (?, ?, ?, ?)';
+    const db = await this.getDbName();
+    return CapacitorSQLite.executeSet({
+      database : db,
+      set: [
+        {
+          statement: sql,
+          values: [
+            student.name,
+            student.surname,
+            student.email,
+            student.phone
+          ]
+        }
+      ]
+    }).then((changes: capSQLiteChanges)=>{
+      if(this.isWeb){
+        CapacitorSQLite.saveToStore({database: db})
+      }
+      return changes;
+    })
+  }
+
+  async updateStudent(student: Student){
+    let sql = 'UPDATE students SET name=?, surname=?, email=?, phone=? WHERE id=?'
+    const db = await this.getDbName();
+    return CapacitorSQLite.executeSet({
+      database : db,
+      set:[
+        {
+          statement: sql,
+          values: [
+            student.name, 
+            student.surname,
+            student.email,
+            student.phone,
+            student.id
+          ]
+        }
+      ]
+    }).then((changes: capSQLiteChanges)=>{
+      if(this.isWeb){
+        CapacitorSQLite.saveToStore({database: db})
+      }
+      return changes;
+    })
+
+  }
+
+  async deleteStudent(student: Student){
+    let sql = 'UPDATE students SET active = 0 WHERE id = ?'
+    const db = await this.getDbName();
+    return CapacitorSQLite.executeSet({
+      database: db,
+      set: [
+        {
+          statement: sql,
+          values: [
+            student.id
+          ]
+        }
+      ]
+    }).then((changes: capSQLiteChanges)=>{
+      if(this.isWeb){
+        CapacitorSQLite.saveToStore({database: db})
+      }
+      return changes;
+    })
+  }
+
+  // CLASES -------------------------------------------
+
+  async getClasses(){
+    let  sql = 'SELECT * FROM class WHERE active = 1';
+
+    // sql += ' '
+    const db = await this.getDbName();
+    return CapacitorSQLite.query({
+      database: db,
+      statement: sql,
+      values: []
+    }).then((response:  capSQLiteValues)=>{
+      let classes: Classes[] = [];
+      for (let index = 0; index < response.values.length; index++) {
+        const row = response.values[index];
+        const c: Classes = row as Classes
+        classes.push(c)
+      }
+      return Promise.resolve(classes);
+    }).catch(error => Promise.reject(error))
+  }
+  
 }

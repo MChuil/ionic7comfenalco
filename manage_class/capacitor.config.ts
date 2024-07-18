@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.class.manage',
+  appId: 'io.clases.manage',
   appName: 'Manage Class',
   webDir: 'www',
   plugins: {

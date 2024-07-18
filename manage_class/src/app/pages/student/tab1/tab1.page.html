@@ -29,9 +29,20 @@
   
       <ion-row *ngFor="let row of students">
         <ion-col>
-          <ion-item>
-            {{ row.name }} {{ row.surname }}
-          </ion-item>
+          <ion-item-sliding>
+            <ion-item>
+              {{ row.name }} {{ row.surname }}
+            </ion-item>
+            <ion-item-options side="end">
+              <ion-item-option color="warning" (click)="updateStudent(row)">
+                <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+              </ion-item-option>
+              <ion-item-option color="danger" (click)="deleteStudentConfirm(row)">
+                <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+
+          </ion-item-sliding>
         </ion-col>
       </ion-row>
     </div>
@@ -39,18 +50,21 @@
     <ion-row *ngIf="showForm">
       <form (ngSubmit)="createUpdateStudent()">
         <ion-item>
-          <ion-input label="Nombre" type="text" name="name" [(ngModel)]="name"></ion-input>
+          <ion-input label="Nombre" type="text" name="name" [(ngModel)]="student.name"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-input label="Apellidos" type="text" name="surname" [(ngModel)]="surname"></ion-input>
+          <ion-input label="Apellidos" type="text" name="surname" [(ngModel)]="student.surname"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-input label="Correo" type="text" name="email" [(ngModel)]="email"></ion-input>
+          <ion-input label="Correo" type="text" name="email" [(ngModel)]="student.email"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-input label="Telefono" type="text" name="phone" [(ngModel)]="phone"></ion-input>
+          <ion-input label="Telefono" type="text" name="phone" [(ngModel)]="student.phone"></ion-input>
         </ion-item>
-        <ion-button type="submit" (click)="onCloseForm()">Añadir estudiante</ion-button>
+        <div>
+          <ion-button (click)="onCloseForm()" size="small">Volver</ion-button>
+          <ion-button type="submit" size="small">{{ (update) ? 'Actualizar estudiante' : 'Agregar estudiante' }}</ion-button>
+        </div>
       </form>
     </ion-row>
   </ion-grid>
