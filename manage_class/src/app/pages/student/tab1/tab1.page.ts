@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Student } from 'src/app/models/student';
+import { AlertService } from 'src/app/services/alert.service';
 import { SqliteManagerService } from 'src/app/services/sqlite-manager.service';
 
 @Component({
@@ -10,19 +11,22 @@ import { SqliteManagerService } from 'src/app/services/sqlite-manager.service';
 export class Tab1Page implements OnInit {
 
   public students: Student[];
+  public student: Student;
   public showForm: boolean;
+  public update: boolean;
 
-  public name: string;
-  public surname: string;
-  public email: string;
-  public phone: string;
-
-  constructor(private sqliteService: SqliteManagerService) {
+  constructor(private sqliteService: SqliteManagerService, private alertService: AlertService) {
     this.showForm = false;
+    this.update  = false;
   }
 
   ngOnInit(): void {
-      this.getStudents();  
+    this.getStudents();  
+    if(!this.student){
+      this.student = new Student();
+    }else{
+      this.update = true;
+    }
   }
 
   getStudents(){
@@ -35,19 +39,62 @@ export class Tab1Page implements OnInit {
   onShowForm(){
     this.showForm = true;
   }
+
   onCloseForm(){
+    this.update = false;
+    this.student = new Student();
     this.showForm = false;
   }
 
   searchStudent($event){
-    console.log($event.detail.value)
     this.sqliteService.getStudents($event.detail.value).then((students: Student[])=>{
       this.students = students
     })
   }
 
   createUpdateStudent(){
+    if(this.update){ //actualizar
+      this.sqliteService.updateStudent(this.student).then(()=>{
+        this.alertService.alertMessage('Exito', 'Datos del estudiante actualizados...');
+        this.update = false;
+        this.student = null;
+        this.getStudents();
+      }).catch(err =>{
+        this.alertService.alertMessage('Error', JSON.stringify(err))
+      })
+    }else{ //insertar
+      this.sqliteService.createStudent(this.student).then((student)=>{
+        this.alertService.alertMessage('Exito', 'Estudiante agregado correctamente');
+        this.getStudents();
+      }).catch(err =>{
+        this.alertService.alertMessage('Error', JSON.stringify(err))
+      })
+    }
+    this.onCloseForm();
+    
+  }
 
+  updateStudent(student: Student){
+    this.student = student;
+    this.update = true;
+    this.onShowForm();
+  }
+
+  deleteStudentConfirm(student: Student){
+    const self = this;
+    this.alertService.alertConfirm('¿Seguro?', `¿Estas seguro que desea eliminar al estudiante ${student.name} ${student.surname}?`, function(){
+      self.deleteStudent(student)
+    })
+  }
+
+
+  deleteStudent(student: Student){
+  this.sqliteService.deleteStudent(student).then(()=>{
+    this.alertService.alertMessage('Exito', 'Estudiante eliminado...');
+      this.getStudents();
+    }).catch(err=>{
+      this.alertService.alertMessage('Error', JSON.stringify(err));
+    })
   }
 
 }
