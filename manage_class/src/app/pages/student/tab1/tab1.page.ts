@@ -11,22 +11,18 @@ import { SqliteManagerService } from 'src/app/services/sqlite-manager.service';
 export class Tab1Page implements OnInit {
 
   public students: Student[];
-  public student: Student;
+  public studentSelected: Student;
   public showForm: boolean;
   public update: boolean;
 
-  constructor(private sqliteService: SqliteManagerService, private alertService: AlertService) {
+  constructor(private sqliteService: SqliteManagerService,private alertService: AlertService,) {
     this.showForm = false;
     this.update  = false;
   }
 
   ngOnInit(): void {
     this.getStudents();  
-    if(!this.student){
-      this.student = new Student();
-    }else{
-      this.update = true;
-    }
+    
   }
 
   getStudents(){
@@ -42,7 +38,7 @@ export class Tab1Page implements OnInit {
 
   onCloseForm(){
     this.update = false;
-    this.student = new Student();
+    this.studentSelected = new Student();
     this.showForm = false;
   }
 
@@ -52,30 +48,10 @@ export class Tab1Page implements OnInit {
     })
   }
 
-  createUpdateStudent(){
-    if(this.update){ //actualizar
-      this.sqliteService.updateStudent(this.student).then(()=>{
-        this.alertService.alertMessage('Exito', 'Datos del estudiante actualizados...');
-        this.update = false;
-        this.student = null;
-        this.getStudents();
-      }).catch(err =>{
-        this.alertService.alertMessage('Error', JSON.stringify(err))
-      })
-    }else{ //insertar
-      this.sqliteService.createStudent(this.student).then((student)=>{
-        this.alertService.alertMessage('Exito', 'Estudiante agregado correctamente');
-        this.getStudents();
-      }).catch(err =>{
-        this.alertService.alertMessage('Error', JSON.stringify(err))
-      })
-    }
-    this.onCloseForm();
-    
-  }
+
 
   updateStudent(student: Student){
-    this.student = student;
+    this.studentSelected = student;
     this.update = true;
     this.onShowForm();
   }

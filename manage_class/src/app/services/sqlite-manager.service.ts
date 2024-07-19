@@ -204,4 +204,74 @@ export class SqliteManagerService {
     }).catch(error => Promise.reject(error))
   }
   
+
+  async createClass(classe: Classes){
+    let sql= 'INSERT INTO class (date_start, date_end, id_student, price) VALUES (?, ?, ?, ?)'
+    const db = await this.getDbName();
+    return CapacitorSQLite.executeSet({
+      database: db,
+      set:[
+        {
+          statement: sql,
+          values: [
+            classe.date_start,
+            classe.date_end,
+            classe.id_student,
+            classe.price
+          ]
+        }
+      ]
+    }).then((changes: capSQLiteChanges)=>{
+      if(this.isWeb){
+        CapacitorSQLite.saveToStore({database: db})
+      }
+      return changes;
+    })
+  }
+
+  async updateClass(classe: Classes){
+    let sql = 'UPDATE class SET date_start = ?, date_end = ?, id_student = ?, price=? WHERE id = ?'
+    const db = await this.getDbName();
+    return CapacitorSQLite.executeSet({
+      database: db,
+      set: [
+        {
+          statement: sql,
+          values:[
+            classe.date_start,
+            classe.date_end,
+            classe.id_student,
+            classe.price,
+            classe.id
+          ]
+        }
+      ]
+    }).then((changes: capSQLiteChanges)=>{
+      if(this.isWeb){
+        CapacitorSQLite.saveToStore({database: db})
+      }
+      return changes;
+    })
+  }
+
+  async deleteClass(classe: Classes){
+    let sql = 'UPDATE class SET active = 0 WHERE id = ?'
+    const db = await this.getDbName();
+    return CapacitorSQLite.executeSet({
+      database: db,
+      set: [
+        {
+          statement: sql,
+          values: [
+            classe.id
+          ]
+        }
+      ]
+    }).then((changes: capSQLiteChanges)=>{
+      if(this.isWeb){
+        CapacitorSQLite.saveToStore({database: db})
+      }
+      return changes;
+    })
+  }
 }
