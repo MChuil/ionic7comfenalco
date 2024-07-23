@@ -38,8 +38,9 @@ export class Tab1Page implements OnInit {
 
   onCloseForm(){
     this.update = false;
-    this.studentSelected = new Student();
+    this.studentSelected = null;
     this.showForm = false;
+    this.getStudents();
   }
 
   searchStudent($event){

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Classes } from 'src/app/models/classes';
 import { SqliteManagerService } from 'src/app/services/sqlite-manager.service';
 import { Student } from 'src/app/models/student';
-import * as moment from 'moment';
 import { AlertService } from 'src/app/services/alert.service';
+import { Filter } from 'src/app/models/filter';
 
 @Component({
   selector: 'app-tab2',
@@ -16,24 +16,18 @@ export class Tab2Page implements OnInit{
   public objClass: Classes;
   public students: Student[];
   public showForm: boolean;
-  public update: boolean;
+
+  public filter: Filter;
+
 
   constructor( private sqliteService: SqliteManagerService, private alertService: AlertService) {
     this.showForm = false;
     this.classes = [];
-    this.update = false;
+    this.filter = new Filter();
   }
 
   ngOnInit(): void {
     this.getClasses();
-    if(!this.objClass){
-      this.objClass = new Classes();
-      this.objClass.price = 0;
-    }else{
-      this.update = true;
-    }
-
-    
   }
 
   getClasses(){
@@ -63,37 +57,14 @@ export class Tab2Page implements OnInit{
   }
 
   onCloseForm(){
-    this.update = false;
-    this.objClass = new Classes();
+    this.objClass = null;
     this.showForm = false;
     this.getClasses();
-  }
-
-  createUpdateClass(){
-    this.objClass.date_start = moment(this.objClass.date_start).format('YYYY-MM-DDTHH:mm')
-    this.objClass.date_end = moment(this.objClass.date_end).format('YYYY-MM-DDTHH:mm')
-
-    if(this.update){ //actualizar
-      this.sqliteService.updateClass(this.objClass).then(()=>{
-        this.alertService.alertMessage('Bien', 'Clase editada correctamente')
-        this.onCloseForm();
-      }).catch(err =>{
-        this.alertService.alertMessage('Error', JSON.stringify(err))
-      })
-    }else{ //crear 
-      this.sqliteService.createClass(this.objClass).then(() =>{
-        this.alertService.alertMessage('Bien', 'Clase agregada correctamente')
-        this.onCloseForm();
-      }).catch(err =>{
-        this.alertService.alertMessage('Error', JSON.stringify(err))
-      })
-    }
   }
 
 
   updateClass(classe: Classes){
     this.objClass = classe;
-    this.update = true;
     this.onShowForm();
   }
 

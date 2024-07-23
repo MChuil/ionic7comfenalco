@@ -19,8 +19,6 @@ export class FormStudentComponent  implements OnInit {
  
   constructor(private alertService: AlertService, private sqliteService: SqliteManagerService) {
     this.close = new EventEmitter<boolean>();
-    this.get = new EventEmitter<boolean>();
-
   }
 
   ngOnInit() {
@@ -37,19 +35,19 @@ export class FormStudentComponent  implements OnInit {
         this.alertService.alertMessage('Exito', 'Datos del estudiante actualizados...');
         this.update = false;
         this.student = null;
-        // this.getStudents();
+        this.onCloseForm();
       }).catch(err =>{
         this.alertService.alertMessage('Error', JSON.stringify(err))
       })
     }else{ //insertar
       this.sqliteService.createStudent(this.student).then((student)=>{
         this.alertService.alertMessage('Exito', 'Estudiante agregado correctamente');
-        // this.getStudents();
+        this.onCloseForm();
       }).catch(err =>{
         this.alertService.alertMessage('Error', JSON.stringify(err))
       })
     }
-    this.onCloseForm();
+    
     
   }
 
