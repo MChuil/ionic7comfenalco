@@ -8,6 +8,8 @@ import { HttpClient } from '@angular/common/http';
 import { Student } from '../models/student';
 import { Statement } from '@angular/compiler';
 import { Classes } from '../models/classes';
+import { Filter } from '../models/filter';
+import { Payment } from '../models/payment';
 
 @Injectable({
   providedIn: 'root'
@@ -184,10 +186,24 @@ export class SqliteManagerService {
 
   // CLASES -------------------------------------------
 
-  async getClasses(){
+  async getClasses(filter?: Filter){
     let  sql = 'SELECT * FROM class WHERE active = 1';
+    if(filter){
+      //inicio, fin, id_estudiante
+      if(filter.date_start){
+        sql += ` AND date_start >= '${filter.date_start}'`
+      }
 
-    // sql += ' '
+      if(filter.date_end){
+        sql += ` AND date_end <= '${filter.date_end}'`
+      }
+
+      if(filter.id_student){
+        sql += ` AND id_student = '${filter.id_student}'`
+      }
+
+    }
+
     const db = await this.getDbName();
     return CapacitorSQLite.query({
       database: db,
@@ -274,4 +290,26 @@ export class SqliteManagerService {
       return changes;
     })
   }
+
+
+  // PAGOS -------------------------------------------
+
+  async getPayments(){
+    let sql = 'SELECT p.* FROM payments p, class c WHERE p.id_class = c.id AND c.active = 1 ORDER BY p.date'
+    const db = await this.getDbName();
+    return CapacitorSQLite.query({
+      database: db,
+      statement: sql,
+      values: []
+    }).then((response: capSQLiteValues) =>{
+      let payments: Payment[] = [];
+      for (let index = 0; index < response.values.length; index++) {
+        const row = response.values[index];
+        let payment: Payment = row as Payment
+        payments.push(payment)
+      }
+      return Promise.resolve(payments)
+    }).catch(err => Promise.reject(err))
+  }
+
 }

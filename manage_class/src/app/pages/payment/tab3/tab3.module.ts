@@ -6,12 +6,14 @@ import { Tab3Page } from './tab3.page';
 
 
 import { Tab3PageRoutingModule } from './tab3-routing.module';
+import { ListDataComponent } from 'src/app/shared/list-data/list-data.component';
 
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
+    ListDataComponent,
     Tab3PageRoutingModule
   ],
   declarations: [Tab3Page]

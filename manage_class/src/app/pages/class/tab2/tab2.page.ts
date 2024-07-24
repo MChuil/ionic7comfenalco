@@ -33,7 +33,7 @@ export class Tab2Page implements OnInit{
   getClasses(){
     Promise.all([
       this.sqliteService.getStudents(),
-      this.sqliteService.getClasses()
+      this.sqliteService.getClasses(this.filter)
     ]).then(results => {
       this.students = results[0];
       this.classes = results[1];
@@ -85,5 +85,10 @@ export class Tab2Page implements OnInit{
     }).catch(err =>{
       this.alertService.alertMessage('Error', JSON.stringify(err))
     })
+  }
+
+  search($event: Filter){
+    this.filter = $event;
+    this.getClasses()
   }
 }

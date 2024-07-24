@@ -10,7 +10,10 @@
   <ion-grid>
     <div *ngIf="!showForm">
       <!-- cuadro de busqueda -->
-      <app-filter [filter]="filter"></app-filter>
+      <app-filter 
+        [filter]="filter" 
+        (filterData)="search($event)">
+      </app-filter>
       <!-- inyectar el componente -->
       <app-list-data
         [data] = "classes"
