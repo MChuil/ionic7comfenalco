@@ -4,6 +4,8 @@ import { SqliteManagerService } from 'src/app/services/sqlite-manager.service';
 import { Student } from 'src/app/models/student';
 import { AlertService } from 'src/app/services/alert.service';
 import { Filter } from 'src/app/models/filter';
+import { Payment } from 'src/app/models/payment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-tab2',
@@ -30,14 +32,21 @@ export class Tab2Page implements OnInit{
     this.getClasses();
   }
 
+  ionViewWillEnter(){
+    this.getClasses();
+  }
+
   getClasses(){
     Promise.all([
       this.sqliteService.getStudents(),
-      this.sqliteService.getClasses(this.filter)
+      this.sqliteService.getClasses(this.filter),
+      this.sqliteService.getPayments()
     ]).then(results => {
       this.students = results[0];
       this.classes = results[1];
+      let payments = results[2];
       this.associate(this.students);
+      this.needPayClasses(payments);
       console.log(this.classes);
     })
   }
@@ -52,6 +61,15 @@ export class Tab2Page implements OnInit{
   }
 
 
+  private needPayClasses(payments: Payment[]){
+    payments.forEach( p =>{
+      let classFound = this.classes.find(c => c.id == p.id_class);
+      if(classFound && !p.paid){
+        classFound.needPay = true;
+      }
+    })
+  }
+
   onShowForm(){
     this.showForm = true;
   }
@@ -62,6 +80,18 @@ export class Tab2Page implements OnInit{
     this.getClasses();
   }
 
+  payClass(c: Classes){
+    this.sqliteService.getPaymentByClass(c.id).then((payment: Payment)=>{
+      if(payment){
+        payment.date = moment().format('YYYY-MM-DDTHH:mm');
+        payment.paid = 1;
+        this.sqliteService.updatePayment(payment).then(()=>{
+          this.getClasses();
+          this.alertService.alertMessage('Bien', 'Clase pagadada correctamente');
+        }).catch(err => console.log(err))
+      }
+    }).catch(err => console.log(err))
+  }
 
   updateClass(classe: Classes){
     this.objClass = classe;
@@ -91,4 +121,5 @@ export class Tab2Page implements OnInit{
     this.filter = $event;
     this.getClasses()
   }
+
 }

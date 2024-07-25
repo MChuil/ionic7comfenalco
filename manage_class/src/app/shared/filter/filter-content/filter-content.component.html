@@ -2,6 +2,16 @@
   <ion-row>
     <ion-col>
       <form (ngSubmit)="filterData()">
+        <ion-row *ngIf="payment">
+          <ion-col>
+              <ion-item>
+                <ion-toggle [enableOnOffLabels]="true" [(ngModel)]="filter.paid" name="paid">
+                  Pagado
+                </ion-toggle>
+              </ion-item>
+          </ion-col>
+        </ion-row>
+
         <ion-row>
           <ion-col>
             <ion-item>

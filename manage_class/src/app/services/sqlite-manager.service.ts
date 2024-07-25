@@ -291,11 +291,58 @@ export class SqliteManagerService {
     })
   }
 
+  async getPaymentByClass(id_class: number){
+    let sql = 'SELECT * FROM payments WHERE id_class = ?'
+    const db = await this.getDbName();
+    return  CapacitorSQLite.query({
+      database: db,
+      statement: sql,
+      values: [
+        id_class
+      ]
+    }).then((response: capSQLiteValues)=>{
+        let payment: Payment;
+        if(response.values.length > 0){
+          const row = response.values[0];
+          payment =  row as Payment;
+        }      
+        return Promise.resolve(payment);
+      }).catch(error => Promise.reject(error))
+  }
 
   // PAGOS -------------------------------------------
 
-  async getPayments(){
-    let sql = 'SELECT p.* FROM payments p, class c WHERE p.id_class = c.id AND c.active = 1 ORDER BY p.date'
+  async getPayments(filter?: Filter){
+    let sql = 'SELECT p.* FROM payments p, class c WHERE p.id_class = c.id AND c.active = 1';
+    if(filter && filter.paid != null){
+      if(filter.paid){
+        sql += ' AND p.paid = 1';
+      }else{
+        sql += ' AND p.paid = 0';
+      }
+  
+      if(filter.date_start){
+        if(filter.paid){ //si busca los pagados
+          sql += ` AND p.date >= '${filter.date_start}'` //se busca por la fecha en que se pago
+        }else{ //si no busca los pagados
+          sql += ` AND c.date_star >= '${filter.date_start}`
+        }
+      }
+      
+      if(filter.date_end){
+        if(filter.paid){ //si busca los pagados
+          sql += ` AND p.date <= '${filter.date_end}'` //se busca por la fecha en que se pago
+        }else{ //si no busca los pagados
+          sql += ` AND c.date_end <= '${filter.date_end}`
+        }
+      }
+
+      if(filter.id_student){
+        sql += ` AND c.id_student = ${filter.id_student}`
+      }
+    }
+    sql += ' ORDER BY p.date';
+
     const db = await this.getDbName();
     return CapacitorSQLite.query({
       database: db,
@@ -310,6 +357,55 @@ export class SqliteManagerService {
       }
       return Promise.resolve(payments)
     }).catch(err => Promise.reject(err))
+  }
+
+  async createPayment(payment: Payment){
+    let sql = 'INSERT INTO payments(date, id_class, paid) VALUES (?, ?, ?)'
+    const db = await this.getDbName();
+    return CapacitorSQLite.executeSet({
+      database: db,
+      set:[
+        {
+          statement: sql,
+          values: [
+            payment.date,
+            payment.id_class,
+            payment.paid
+          ]
+        }
+      ]
+    }).then((changes: capSQLiteChanges) =>{
+      if(this.isWeb){
+        CapacitorSQLite.saveToStore({
+          database: db
+        })
+      }
+      return changes;
+    })
+  }
+
+  async updatePayment(payment: Payment){
+    let sql = 'UPDATE payments SET date= ?, id_class = ?, paid = ? WHERE id = ?'
+    const db = await this.getDbName();
+    return CapacitorSQLite.executeSet({
+      database: db,
+      set:[
+        {
+          statement: sql,
+          values:[
+            payment.date,
+            payment.id_class,
+            payment.paid,
+            payment.id
+          ]
+        }
+      ]
+    }).then((changes: capSQLiteChanges)=>{
+      if(this.isWeb){
+        CapacitorSQLite.saveToStore({database: db})
+      }
+      return changes;
+    })
   }
 
 }

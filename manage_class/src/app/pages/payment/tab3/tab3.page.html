@@ -10,11 +10,13 @@
   <ion-grid>
     <ion-row>
       <ion-col>
+        <app-filter [filter]="filter" [payment]="true" (filterData)="search($event)"></app-filter>
+
         <ion-row>
           <ion-col>
             <ion-item>
-              <ion-label>Total:</ion-label>
-              <ion-text>{{ total | currency:'USD' }}</ion-text>
+              <ion-label class="h2">Total:</ion-label>
+              <ion-text class="h2">{{ total | currency:'USD' }}</ion-text>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -28,11 +30,15 @@
             >
               <ng-template #templateData let-item="item">
                 <ion-item [ngClass]="{'no-paid': !item.paid, 'paid': item.paid }">
-                  <ion-label>
-                    {{ item.class?.student?.name}} {{ item.class?.student?.surname}} -
-                    {{ (item.date ? item.date : item.class.date_start) | date: 'dd MMM yyyy HH:mm'}} -
-                    {{ (item.paid ? 'PAGADO': 'No Pagado')}}
-                  </ion-label>
+                  <ion-text class="flex" >
+                      <div>
+                        {{ item.class?.student?.name}} {{ item.class?.student?.surname}} <br>
+                        {{ (item.date ? item.date : item.class.date_start) | date: 'dd MMM yyyy HH:mm'}}
+                      </div>
+                      <ion-icon color="{{ (item.paid ? 'success': 'danger')}}" name="{{ (item.paid ? 'checkmark-circle': 'close-circle')}}"></ion-icon>
+
+                    
+                  </ion-text>
                 </ion-item>
               </ng-template>
             </app-list-data>

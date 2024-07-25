@@ -7,6 +7,7 @@ import { Tab3Page } from './tab3.page';
 
 import { Tab3PageRoutingModule } from './tab3-routing.module';
 import { ListDataComponent } from 'src/app/shared/list-data/list-data.component';
+import { FilterComponent } from 'src/app/shared/filter/filter.component';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { ListDataComponent } from 'src/app/shared/list-data/list-data.component'
     CommonModule,
     FormsModule,
     ListDataComponent,
-    Tab3PageRoutingModule
+    Tab3PageRoutingModule,
+    FilterComponent
   ],
   declarations: [Tab3Page]
 })

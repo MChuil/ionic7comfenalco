@@ -1,7 +1,20 @@
 .paid{
-    --ion-item-background: green;
+    border-bottom: 1px solid green;
 }
 
 .no-paid{
-    --ion-item-background: red;
+    border-bottom: 1px solid red;
+}
+.flex{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+ion-icon{
+    font-size: 2rem;
+}
+.h2{
+    font-weight: bold;
+    font-size: 2rem;
 }

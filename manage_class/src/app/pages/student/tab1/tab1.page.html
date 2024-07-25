@@ -47,7 +47,9 @@
     </div>
 
     <ion-row *ngIf="showForm">
-      <app-form-student [student]="studentSelected" (close)="onCloseForm()"></app-form-student>
+      <ion-col>
+        <app-form-student [student]="studentSelected" (close)="onCloseForm()"></app-form-student>
+      </ion-col>
     </ion-row>
   </ion-grid>
 

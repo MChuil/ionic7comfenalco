@@ -14,6 +14,7 @@ import { Filter } from 'src/app/models/filter';
 export class FilterComponent  implements OnInit {
 
   @Input() filter: Filter;
+  @Input() payment: boolean = false;
 
   @Output() filterData: EventEmitter<Filter>
 
@@ -34,11 +35,13 @@ export class FilterComponent  implements OnInit {
       event,
       cssClass: 'custom-popover',
       componentProps: {
-        filter: this.filter
+        filter: this.filter,
+        payment: this.payment
       }
     });
 
     popover.onDidDismiss().then((event)=>{
+      console.group(event.data);
       this.showFilter = false;
       if(event.data){
         this.filterData.emit(event.data)

@@ -3,6 +3,7 @@ import { Classes } from 'src/app/models/classes';
 import { Payment } from 'src/app/models/payment';
 import { Student } from 'src/app/models/student';
 import { SqliteManagerService } from 'src/app/services/sqlite-manager.service';
+import { Filter } from '../../../models/filter';
 
 @Component({
   selector: 'app-tab3',
@@ -13,19 +14,26 @@ export class Tab3Page implements OnInit{
 
   public payments: Payment[];
   public total: number;
+  public filter: Filter;
 
   constructor(private sqliService: SqliteManagerService) {
     this.payments = [];
     this.total = 0;
+    this.filter = new Filter();
+    this.filter.paid = null;
   }
 
   ngOnInit() {
     this.getPayments();
   }
 
+  ionViewWillEnter(){
+    this.getPayments();
+  }
+
   async getPayments(){
     Promise.all([
-      this.sqliService.getPayments(),
+      this.sqliService.getPayments(this.filter),
       this.sqliService.getClasses(),
       this.sqliService.getStudents()
     ]).then( (results)=>{
@@ -33,7 +41,7 @@ export class Tab3Page implements OnInit{
       let classes = results[1];
       let students = results[2];
       this.associateObjects(classes, students);
-      console.log(this.payments);
+      this.total = 0;
       this.calculateTotal();
     })
   }
@@ -54,5 +62,10 @@ export class Tab3Page implements OnInit{
     })
     // TODO: Crear la suma con reduce
     console.log(this.total)
+  }
+
+  search($event: Filter){
+    this.filter = $event;
+    this.getPayments();
   }
 }

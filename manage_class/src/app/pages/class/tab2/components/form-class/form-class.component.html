@@ -29,6 +29,19 @@
     <ion-text>$ {{ objClass.price }}</ion-text>
   </ion-item>
 
+  <ion-item>
+    <ion-toggle [disabled]="update && alreadyPaid" [enableOnOffLabels]="true" [(ngModel)]="paid" name="paid">¿Pagado?</ion-toggle>
+  </ion-item>
+  <ion-item *ngIf="paid">
+    <ion-label>Fecha de pago</ion-label>
+    <ion-datetime-button slot="end" displayFormat="DD MMM yyyy HH MM" datetime="date_paid"></ion-datetime-button>
+    <ion-modal [keepContentsMounted]="true">
+      <ng-template>
+        <ion-datetime id="date_paid" [(ngModel)] = "payment.date" name = "date_paid"></ion-datetime>
+      </ng-template>
+    </ion-modal>
+  </ion-item>
+
   <ion-grid>
     <ion-row>
       <ion-col>
