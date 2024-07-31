@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ModalService } from 'src/app/services/modal.service';
 
 @Component({
   selector: 'app-header',
@@ -8,9 +9,15 @@ import { Component, Input, OnInit } from '@angular/core';
 export class HeaderComponent  implements OnInit {
 
   @Input() title: string;
+  @Input() isModal: boolean;
 
-  constructor() { }
+
+  constructor(private modalService: ModalService) {}
 
   ngOnInit() {}
+
+  dismissModal(){
+    this.modalService.dismissModal();
+  }
 
 }

@@ -1,5 +1,5 @@
 <ion-item lines="none">
-  <ion-icon color="primary" slot="start" [name] ="icon"></ion-icon>
+  <ion-icon *ngIf="icon" color="primary" slot="start" [name] ="icon"></ion-icon>
   <ion-input 
     [type]="type" 
     [autocomplete] ="autocomplete"

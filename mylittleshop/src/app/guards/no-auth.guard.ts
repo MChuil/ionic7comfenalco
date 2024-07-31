@@ -1,5 +1,28 @@
-import { CanActivateFn } from '@angular/router';
+import { Injectable, inject } from '@angular/core';
+import { CanActivate } from '@angular/router';
+import { FirebaseService } from '../services/firebase.service';
+import { getAuth } from 'firebase/auth';
+import { Router } from '@angular/router';
 
-export const noAuthGuard: CanActivateFn = (route, state) => {
-  return true;
-};
+@Injectable({
+  providedIn: 'root'
+})
+
+export class noAuthGuard implements CanActivate{
+  
+  constructor(private fbS: FirebaseService, private router: Router) {}
+
+  canActivate(): any {
+    return new Promise((resolve) =>{
+      this.fbS.getAuth().onAuthStateChanged(auth =>{
+        if(!auth){ 
+            resolve(true);
+        }else{
+            this.router.navigateByUrl('/home')
+            resolve(false);
+        }
+      })
+    })
+  }
+
+}
