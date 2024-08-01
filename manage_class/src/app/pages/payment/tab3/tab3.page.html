@@ -1,11 +1,51 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 3
+      Pagos
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <app-filter [filter]="filter" [payment]="true" (filterData)="search($event)"></app-filter>
 
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label class="h2">Total:</ion-label>
+              <ion-text class="h2">{{ total | currency:'USD' }}</ion-text>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+
+        <ion-row>
+          <ion-col>
+            <app-list-data 
+              [data] = "payments"
+              emptyText = "No hay pagos registrados"
+            >
+              <ng-template #templateData let-item="item">
+                <ion-item [ngClass]="{'no-paid': !item.paid, 'paid': item.paid }">
+                  <ion-text class="flex" >
+                      <div>
+                        {{ item.class?.student?.name}} {{ item.class?.student?.surname}} <br>
+                        {{ (item.date ? item.date : item.class.date_start) | date: 'dd MMM yyyy HH:mm'}}
+                      </div>
+                      <ion-icon color="{{ (item.paid ? 'success': 'danger')}}" name="{{ (item.paid ? 'checkmark-circle': 'close-circle')}}"></ion-icon>
+
+                    
+                  </ion-text>
+                </ion-item>
+              </ng-template>
+            </app-list-data>
+          </ion-col>
+        </ion-row>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

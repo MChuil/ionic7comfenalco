@@ -1,0 +1,19 @@
+
+.noImage{
+    font-size: 100px;
+    display: block;
+    margin: 0px auto;
+    opacity: 35%;
+}
+
+.cameraIcon{
+    font-size: 30px;
+    color: var(--primary);
+}
+
+ion-avatar{
+    width: 150px;
+    height: 150px;
+    --border-radius: 15px;
+    margin: 0px auto;
+}

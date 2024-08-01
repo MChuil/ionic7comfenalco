@@ -1,0 +1,49 @@
+<app-header title="Agregar producto" [isModal]="true"></app-header>
+<ion-content>
+    <div class="form">
+        <form [formGroup]="productForm" (ngSubmit)="submit()" class="ion-padding ion-text-center">
+
+            <ion-avatar *ngIf="productForm.value.image">
+                <img [src]="productForm.value.image" />
+            </ion-avatar>
+
+            <ion-icon class="noImage" name="image-outline" *ngIf="!productForm.value.image"></ion-icon>
+
+           
+            <ion-icon class="cameraIcon" name="camera-outline" (click)="takeImage()"></ion-icon>
+           
+
+            <app-custom-input 
+                type ="text"
+                label = "Nombre"
+                [control]="productForm.controls.name"></app-custom-input>
+            <div class="error" *ngIf="productForm.controls.name.errors && productForm.controls.name.touched">
+                <span *ngIf="productForm.controls.name.errors?.['required']">El nombre es obligatorio</span>
+                <span *ngIf="productForm.controls.name.errors?.['minLength']">El nombre debe ser minimo de 4 letras</span>
+            </div>
+            
+            <app-custom-input 
+                type ="number"
+                label = "Precio"
+                [control]="productForm.controls.price"></app-custom-input>
+            <div class="error" *ngIf="productForm.controls.price.errors && productForm.controls.price.touched">
+                <span *ngIf="productForm.controls.price.errors?.['required']">El precio es obligatorio</span>
+                <span *ngIf="productForm.controls.price.errors?.['min']">El precio debe ser minimo cero</span>
+            </div>
+            
+            <app-custom-input 
+                type ="number"
+                label = "Unidades vendidas"
+                [control]="productForm.controls.totalUnits"></app-custom-input>
+            <div class="error" *ngIf="productForm.controls.totalUnits.errors && productForm.controls.totalUnits.touched">
+                <span *ngIf="productForm.controls.totalUnits.errors?.['required']">Las unidades vendidas es obligatorio</span>
+                <span *ngIf="productForm.controls.totalUnits.errors?.['min']">Las unidades vendidas deber ser minimo cero</span>
+            </div>
+            
+            <ion-button expand="block" mode="ios" class="submit" type="submit" [disabled]="productForm.invalid">
+                Agregar producto
+                <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>
+            </ion-button>
+        </form>
+    </div>
+</ion-content>

@@ -1,0 +1,55 @@
+<form (ngSubmit)="createUpdateClass()">
+  <ion-item>
+    <ion-label>Fecha de inicio</ion-label>
+    <ion-datetime-button slot="end" displayFormat="DD MMM yyyy HH MM" datetime="date_start"></ion-datetime-button>
+    <ion-modal [keepContentsMounted]="true">
+      <ng-template>
+        <ion-datetime id="date_start" [(ngModel)] = "objClass.date_start" name = "date_start"></ion-datetime>
+      </ng-template>
+    </ion-modal>
+  </ion-item>
+  <ion-item>
+    <ion-label>Fecha de fin</ion-label>
+    <ion-datetime-button slot="end" displayFormat="DD MMM yyyy HH MM" datetime="date_end"></ion-datetime-button>
+    <ion-modal [keepContentsMounted]="true">
+      <ng-template>
+        <ion-datetime id="date_end" [(ngModel)] = "objClass.date_end" name = "date_end"></ion-datetime>
+      </ng-template>
+    </ion-modal>
+  </ion-item>
+  <ion-item>
+    <ion-select label="Estudiante" name="student" [(ngModel)]="objClass.id_student">
+      <ion-select-option *ngFor="let student of students" [value]="student.id">
+        {{ student.name }} {{ student.surname}}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-range min="0" max="100" [(ngModel)]="objClass.price" label="Precio" name="price"></ion-range>
+    <ion-text>$ {{ objClass.price }}</ion-text>
+  </ion-item>
+
+  <ion-item>
+    <ion-toggle [disabled]="update && alreadyPaid" [enableOnOffLabels]="true" [(ngModel)]="paid" name="paid">¿Pagado?</ion-toggle>
+  </ion-item>
+  <ion-item *ngIf="paid">
+    <ion-label>Fecha de pago</ion-label>
+    <ion-datetime-button slot="end" displayFormat="DD MMM yyyy HH MM" datetime="date_paid"></ion-datetime-button>
+    <ion-modal [keepContentsMounted]="true">
+      <ng-template>
+        <ion-datetime id="date_paid" [(ngModel)] = "payment.date" name = "date_paid"></ion-datetime>
+      </ng-template>
+    </ion-modal>
+  </ion-item>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" tyoe="button" (click)="onCloseForm()">Volver</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button expand="block" type="submit">{{ (update) ? 'Actualizar clase' : 'Agregar clase' }}</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</form>

@@ -1,0 +1,15 @@
+<ion-row *ngIf="data && data.length == 0">
+  <ion-col class="ion-text-center">
+    <ion-text>{{ emptyText }}</ion-text>
+  </ion-col>
+</ion-row>
+
+<ng-container *ngIf="data && data.length > 0">
+  <ion-row *ngFor="let d of data">
+    <ion-col>
+      <ng-template *ngTemplateOutlet="templateData, context:{ item: d }"></ng-template>
+    </ion-col>
+  </ion-row>
+</ng-container>
+
+

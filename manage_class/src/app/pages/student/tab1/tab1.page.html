@@ -9,13 +9,8 @@
 <ion-content [fullscreen]="true">
   
   <ion-grid class="ion-margin-top ion-padding">
-    <ion-row *ngIf="students && students.length == 0">
-        <ion-col class="ion-text-center">
-          <ion-text>No hay alumnos registrados</ion-text>
-        </ion-col>
-    </ion-row>
-    
     <div *ngIf="!showForm">
+      <!-- Fila de cuadro de busqueda -->
       <ion-row>
         <ion-col>
           <ion-searchbar 
@@ -26,29 +21,35 @@
             (ionInput)="searchStudent($event)"></ion-searchbar>
         </ion-col>
       </ion-row>
-  
-      <ion-row *ngFor="let row of students">
-        <ion-col>
+      <!-- fin cuadro de busqueda -->
+
+      <!-- inyectar el componente -->
+      <app-list-data 
+        [data]= "students"
+        emptyText= "No hay alumnos registrados"
+      >
+        <ng-template #templateData let-item="item">
           <ion-item-sliding>
             <ion-item>
-              {{ row.name }} {{ row.surname }}
+              {{ item.name }} {{ item.surname }}
             </ion-item>
             <ion-item-options side="end">
-              <ion-item-option color="warning" (click)="updateStudent(row)">
+              <ion-item-option color="warning" (click)="updateStudent(item)">
                 <ion-icon name="create-outline" slot="icon-only"></ion-icon>
               </ion-item-option>
-              <ion-item-option color="danger" (click)="deleteStudentConfirm(row)">
+              <ion-item-option color="danger" (click)="deleteStudentConfirm(item)">
                 <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
               </ion-item-option>
             </ion-item-options>
-
           </ion-item-sliding>
-        </ion-col>
-      </ion-row>
+        </ng-template>
+      </app-list-data>
     </div>
 
     <ion-row *ngIf="showForm">
-      <app-form-student [student]="studentSelected" (close)="onCloseForm()" (get)="getStudents()"></app-form-student>
+      <ion-col>
+        <app-form-student [student]="studentSelected" (close)="onCloseForm()"></app-form-student>
+      </ion-col>
     </ion-row>
   </ion-grid>
 

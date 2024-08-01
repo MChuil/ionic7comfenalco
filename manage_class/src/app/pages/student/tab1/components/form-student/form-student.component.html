@@ -11,8 +11,16 @@
   <ion-item>
     <ion-input label="Telefono" type="text" name="phone" [(ngModel)]="student.phone"></ion-input>
   </ion-item>
-  <div>
-    <ion-button (click)="onCloseForm()" size="small">Volver</ion-button>
-    <ion-button type="submit" size="small">{{ (update) ? 'Actualizar estudiante' : 'Agregar estudiante' }}</ion-button>
-  </div>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" (click)="onCloseForm()" size="small">Volver</ion-button>
+
+      </ion-col>
+      <ion-col>
+        <ion-button expand="block" type="submit" size="small">{{ (update) ? 'Actualizar alumno' : 'Agregar alumno' }}</ion-button>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </form>

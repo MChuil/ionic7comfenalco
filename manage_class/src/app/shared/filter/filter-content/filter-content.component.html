@@ -1,0 +1,63 @@
+<ion-grid>
+  <ion-row>
+    <ion-col>
+      <form (ngSubmit)="filterData()">
+        <ion-row *ngIf="payment">
+          <ion-col>
+              <ion-item>
+                <ion-toggle [enableOnOffLabels]="true" [(ngModel)]="filter.paid" name="paid">
+                  Pagado
+                </ion-toggle>
+              </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label>Fecha de inicio</ion-label>
+              <ion-datetime-button slot="end" displayFormat="DD MMM yyyy HH MM" datetime="date_start"></ion-datetime-button>
+              <ion-modal [keepContentsMounted]="true">
+                <ng-template>
+                  <ion-datetime id="date_start" [(ngModel)] = "filter.date_start" name = "date_start"></ion-datetime>
+                </ng-template>
+              </ion-modal>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label>Fecha de fin</ion-label>
+              <ion-datetime-button slot="end" displayFormat="DD MMM yyyy HH MM" datetime="date_end"></ion-datetime-button>
+              <ion-modal [keepContentsMounted]="true">
+                <ng-template>
+                  <ion-datetime id="date_end" [(ngModel)] = "filter.date_end" name = "date_end"></ion-datetime>
+                </ng-template>
+              </ion-modal>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-select label="Estudiante" name="student" [(ngModel)]="filter.id_student">
+                <ion-select-option *ngFor="let student of students" [value]="student.id">
+                  {{ student.name }} {{ student.surname}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="6">
+            <ion-button expand="block" type="submit" size="small">Buscar</ion-button>
+          </ion-col>
+          <ion-col size="6">
+            <ion-button expand="block" type="button" (click)="reset()" size="small">Limpiar filtro</ion-button>
+          </ion-col>
+        </ion-row>
+      </form>
+    </ion-col>
+  </ion-row>
+</ion-grid>
