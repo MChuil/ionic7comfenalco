@@ -3,15 +3,19 @@ import { AngularFireAuth }  from "@angular/fire/compat/auth"
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail } from 'firebase/auth';
 import { IUser } from '../interfaces/iuser';
 import { AngularFirestore } from '@angular/fire/compat/firestore'
-import { getFirestore, setDoc, doc, getDoc} from '@angular/fire/firestore'
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { getFirestore, setDoc, doc, getDoc, addDoc, collection, collectionData, query} from '@angular/fire/firestore'
 import { StorageService } from './storage.service';
 import { Router } from '@angular/router';
+import { getStorage, uploadString, ref, getDownloadURL} from 'firebase/storage';
+
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseService {
 
-  constructor(private auth: AngularFireAuth, private firestore: AngularFirestore, private storage: StorageService, private router: Router) { }
+  constructor(private auth: AngularFireAuth, private firestore: AngularFirestore, private storage: StorageService, private router: Router, private firebaseStorage: AngularFireStorage
+  ) { }
 
   //----------------------------- Autenticación -------------------------------
 
@@ -47,6 +51,12 @@ export class FirebaseService {
 
   //----------------------------- Base de datos -------------------------------
 
+  //Obtener los documentos de una colección
+  getCollectionData(path: string, collectionQuery?: any){
+    const ref = collection(getFirestore(), path);
+    return collectionData(query(ref, collectionQuery),{ idField: 'uid'});
+  }
+
   // Setear un documento 
   setDocument(path: string, data: any){
     return setDoc(doc(getFirestore(), path), data);
@@ -54,5 +64,17 @@ export class FirebaseService {
 
   async getDocument(path: string){
     return (await getDoc(doc(getFirestore(), path))).data();
+  }
+
+  //Almacenar en el documento
+  addDocument(path: string, data: any){
+    return addDoc(collection(getFirestore(), path),data);
+  }
+
+  // Almacenamiento en el storage - subir imagen
+  async uploadImage(path: string, dataUrl: string){
+    return uploadString(ref(getStorage(), path), dataUrl, 'data_url').then(()=>{
+      return getDownloadURL(ref(getStorage(), path))
+    })
   }
 }

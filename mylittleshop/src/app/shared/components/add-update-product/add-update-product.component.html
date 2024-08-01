@@ -1,7 +1,18 @@
 <app-header title="Agregar producto" [isModal]="true"></app-header>
 <ion-content>
     <div class="form">
-        <form [formGroup]="productForm" (ngSubmit)="register()" class="ion-padding ion-text-center">
+        <form [formGroup]="productForm" (ngSubmit)="submit()" class="ion-padding ion-text-center">
+
+            <ion-avatar *ngIf="productForm.value.image">
+                <img [src]="productForm.value.image" />
+            </ion-avatar>
+
+            <ion-icon class="noImage" name="image-outline" *ngIf="!productForm.value.image"></ion-icon>
+
+           
+            <ion-icon class="cameraIcon" name="camera-outline" (click)="takeImage()"></ion-icon>
+           
+
             <app-custom-input 
                 type ="text"
                 label = "Nombre"

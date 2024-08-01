@@ -1,7 +1,6 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
 import { FirebaseService } from '../services/firebase.service';
-import { getAuth } from 'firebase/auth';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -24,5 +23,4 @@ export class noAuthGuard implements CanActivate{
       })
     })
   }
-
 }

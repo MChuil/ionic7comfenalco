@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { IProduct } from 'src/app/interfaces/iproduct';
 import { IUser } from 'src/app/interfaces/iuser';
+import { CameraService } from 'src/app/services/camera.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { LoadingService } from 'src/app/services/loading.service';
+import { ModalService } from 'src/app/services/modal.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { ToastService } from 'src/app/services/toast.service';
 
@@ -14,6 +17,8 @@ import { ToastService } from 'src/app/services/toast.service';
 })
 export class AddUpdateProductComponent  implements OnInit {
 
+  @Input() product: IProduct;
+
   public productForm = new FormGroup({
     'id': new FormControl(''),
     'image' : new FormControl(null,[Validators.required]),
@@ -22,29 +27,84 @@ export class AddUpdateProductComponent  implements OnInit {
     'totalUnits': new FormControl(null,[Validators.required, Validators.min(0)]),
   })    
 
-  constructor(private formBuilder: FormBuilder, private firebaseService: FirebaseService, private loadingService: LoadingService, private toastService: ToastService, private router: Router, private storageService: StorageService) {
+  user = {} as IUser;
+
+  constructor(private formBuilder: FormBuilder, private firebaseService: FirebaseService, private loadingService: LoadingService, private toastService: ToastService, private router: Router, private storageService: StorageService, private cameraService: CameraService, private modalService: ModalService) {
  
   }
 
   ngOnInit() {
+    this.user = this.storageService.get('user');
   }
 
-  async register(){
-    const loading = await this.loadingService.loading('Creando cuenta...');
+  submit(){
+    if(!this.product){
+      this.insert();
+    }else{
+      this.update();
+    }
+  }
+  async insert(){
+    const loading = await this.loadingService.loading('Almacenando producto, espere...');
     await loading.present();
-    //creación de cuenta
-    this.firebaseService.signUp(this.productForm.value as IUser)
-    .then(async(resp) => {
-      //actualizo el nombre
-      await this.firebaseService.updateUser(this.productForm.value.name)
 
-      //obtener el uid
-      let uid = resp.user.uid;
-    }).catch(error => {
-      console.log(error)
-      this.toastService.presentToast(error.message, 'danger')
+    let path = `users/${this.user.uid}/products`
+
+    // Subir la imagen y obtener la url
+    let dataUrl = this.productForm.value.image;
+    let imagePath = `${this.user.uid}/${Date.now()}`
+    let imageUrl = await this.firebaseService.uploadImage(imagePath, dataUrl);
+
+    this.productForm.controls.image.setValue(imageUrl)
+
+    delete this.productForm.value.id
+
+    this.firebaseService.addDocument(path, this.productForm.value).then(res =>{
+      this.toastService.presentToast('Producto agregado', 'success', 'checkmark-circle-outline');
+      this.modalService.dismissModal({ success: true });
+    }).catch(err =>{
+      console.log(err);
+      this.toastService.presentToast(err.message, 'danger');
     }).finally(()=>{
       loading.dismiss();
     })
+   
   }
+
+  async update(){
+    const loading = await this.loadingService.loading('Actualizando producto, espere...');
+    await loading.present();
+
+    let path = `users/${this.user.uid}/products/${this.product.uid}`
+    // Subir la imagen y obtener la url
+    if(this.productForm.value.image !== this.product.image){
+      let dataUrl = this.productForm.value.image;
+      let imagePath = `${this.user.uid}/${Date.now()}`
+      let imageUrl = await this.firebaseService.uploadImage(path, dataUrl);
+      this.productForm.controls.image.setValue(imageUrl)
+    }
+
+
+    delete this.productForm.value.id
+
+    this.firebaseService.addDocument(path, this.productForm.value).then(res =>{
+      this.toastService.presentToast('Producto agregado', 'success', 'checkmark-circle-outline');
+      this.modalService.dismissModal({ success: true });
+    }).catch(err =>{
+      console.log(err);
+      this.toastService.presentToast(err.message, 'danger');
+    }).finally(()=>{
+      loading.dismiss();
+    })
+   
+  }
+
+
+
+  // Tomar la imagen----------------
+  async takeImage(){
+    const dataUrl = (await this.cameraService.takePicture()).dataUrl;
+    this.productForm.controls.image.setValue(dataUrl);
+  }
+
 }
