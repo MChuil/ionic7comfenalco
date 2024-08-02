@@ -1,0 +1,86 @@
+<app-header title="Inicio"></app-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!--Totales---------------------- -->
+  <ion-card mode="ios" color="secondary" class="totales iont-text-center" *ngIf="!loading && products.length">
+    <div>
+        <h4>{{ products.length }}</h4>
+        <p>Productos</p>
+    </div>
+    <div>
+      <h4>{{ getTotals() | currency: 'USD'}}</h4>
+      <p>Ganancias</p>
+    </div>
+  </ion-card>
+
+  <ion-list>
+    <ion-item-sliding *ngFor="let product of products">
+      <ion-item>
+        <ion-avatar slot="start">
+          <img [src]="product.image" />
+        </ion-avatar>
+        <ion-label>
+          <div class="name">
+              {{ product.name }}
+          </div>
+          <div class="data">
+            <div><strong>Precio:</strong> {{ product.price | currency: 'USD' }}</div>
+            <div><strong>Unidades vendidad: </strong> {{ product.totalUnits}}</div>
+          </div>
+
+          <ion-chip color="primary" mode="ios" outline="true">
+            <ion-label>Ganancia: {{ (product.price * product.totalUnits) | currency: 'USD'}}</ion-label>
+          </ion-chip>
+        </ion-label>
+      </ion-item>
+
+      <ion-item-options>
+        <ion-item-option color="primary" (click)="addUpdateProduct(product)">
+          <ion-icon class="option-icon" name="create-outline"></ion-icon>
+        </ion-item-option>
+
+        <ion-item-option color="danger" (click)="presentAlert(product)">
+          <ion-icon class="option-icon" name="trash-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+
+  <!------Loading------>
+  <ion-list *ngIf="loading">
+      <ion-item *ngFor="let product of [1,1,1,1,1,1,1,1]">
+        <ion-avatar slot="start">
+          <ion-skeleton-text animated style="width: 100%; height:100%;"></ion-skeleton-text>
+        </ion-avatar>
+        <ion-label>
+          <div>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </div>
+          <div>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </div>
+          <div>
+            <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+          </div>
+        </ion-label>
+      </ion-item>
+  </ion-list>
+
+  <!-- Sin productoss--->
+  <div class="empty" *ngIf="!loading && !products.length">
+    <ion-icon  name="shield-outline"></ion-icon>
+    <h3>No hay productos</h3>
+  </div>
+
+  <!-- Nuevo Producto -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="addUpdateProduct()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

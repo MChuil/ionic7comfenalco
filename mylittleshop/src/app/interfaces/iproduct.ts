@@ -3,5 +3,5 @@ export interface IProduct{
     image : string;
     totalUnits: number;
     name : string;
-    uid? : string;
+    uid : string;
 }

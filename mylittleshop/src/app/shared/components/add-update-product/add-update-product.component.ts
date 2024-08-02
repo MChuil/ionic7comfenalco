@@ -20,7 +20,7 @@ export class AddUpdateProductComponent  implements OnInit {
   @Input() product: IProduct;
 
   public productForm = new FormGroup({
-    'id': new FormControl(''),
+    'uid': new FormControl(''),
     'image' : new FormControl(null,[Validators.required]),
     'name' : new FormControl(null,[Validators.required, Validators.minLength(4)]),
     'price' : new FormControl(null,[Validators.required, Validators.min(0)]),
@@ -35,8 +35,16 @@ export class AddUpdateProductComponent  implements OnInit {
 
   ngOnInit() {
     this.user = this.storageService.get('user');
+    if(this.product) this.productForm.setValue(this.product)
   }
 
+
+  // convierte de string a numeros
+  setNumberInput(){
+    let { price, totalUnits } = this.productForm.controls
+    if(price.value) price.setValue(parseFloat(price.value)) 
+    if(totalUnits.value) totalUnits.setValue(parseFloat(totalUnits.value)) 
+  }
   submit(){
     if(!this.product){
       this.insert();
@@ -44,6 +52,7 @@ export class AddUpdateProductComponent  implements OnInit {
       this.update();
     }
   }
+
   async insert(){
     const loading = await this.loadingService.loading('Almacenando producto, espere...');
     await loading.present();
@@ -57,7 +66,7 @@ export class AddUpdateProductComponent  implements OnInit {
 
     this.productForm.controls.image.setValue(imageUrl)
 
-    delete this.productForm.value.id
+    delete this.productForm.value.uid
 
     this.firebaseService.addDocument(path, this.productForm.value).then(res =>{
       this.toastService.presentToast('Producto agregado', 'success', 'checkmark-circle-outline');
@@ -70,25 +79,25 @@ export class AddUpdateProductComponent  implements OnInit {
     })
    
   }
-
+  
   async update(){
     const loading = await this.loadingService.loading('Actualizando producto, espere...');
     await loading.present();
 
     let path = `users/${this.user.uid}/products/${this.product.uid}`
+    
     // Subir la imagen y obtener la url
     if(this.productForm.value.image !== this.product.image){
       let dataUrl = this.productForm.value.image;
-      let imagePath = `${this.user.uid}/${Date.now()}`
-      let imageUrl = await this.firebaseService.uploadImage(path, dataUrl);
+      let imagePath = await this.firebaseService.getFilePath(this.product.image); 
+      let imageUrl = await this.firebaseService.uploadImage(imagePath, dataUrl);
       this.productForm.controls.image.setValue(imageUrl)
     }
 
+    delete this.productForm.value.uid
 
-    delete this.productForm.value.id
-
-    this.firebaseService.addDocument(path, this.productForm.value).then(res =>{
-      this.toastService.presentToast('Producto agregado', 'success', 'checkmark-circle-outline');
+    this.firebaseService.updateDocument(path, this.productForm.value).then(res =>{
+      this.toastService.presentToast('Producto actualizado correctamente', 'success', 'checkmark-circle-outline');
       this.modalService.dismissModal({ success: true });
     }).catch(err =>{
       console.log(err);
@@ -96,7 +105,6 @@ export class AddUpdateProductComponent  implements OnInit {
     }).finally(()=>{
       loading.dismiss();
     })
-   
   }
 
 

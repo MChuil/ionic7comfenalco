@@ -1,4 +1,4 @@
-<app-header title="Agregar producto" [isModal]="true"></app-header>
+<app-header [title]="product ? 'Actualizar producto' : 'Agregar producto'" [isModal]="true"></app-header>
 <ion-content>
     <div class="form">
         <form [formGroup]="productForm" (ngSubmit)="submit()" class="ion-padding ion-text-center">
@@ -25,7 +25,9 @@
             <app-custom-input 
                 type ="number"
                 label = "Precio"
-                [control]="productForm.controls.price"></app-custom-input>
+                [control]="productForm.controls.price"
+                (ionInput)="setNumberInput()"
+            ></app-custom-input>
             <div class="error" *ngIf="productForm.controls.price.errors && productForm.controls.price.touched">
                 <span *ngIf="productForm.controls.price.errors?.['required']">El precio es obligatorio</span>
                 <span *ngIf="productForm.controls.price.errors?.['min']">El precio debe ser minimo cero</span>
@@ -34,14 +36,15 @@
             <app-custom-input 
                 type ="number"
                 label = "Unidades vendidas"
-                [control]="productForm.controls.totalUnits"></app-custom-input>
+                [control]="productForm.controls.totalUnits"
+                (ionInput)="setNumberInput()"></app-custom-input>
             <div class="error" *ngIf="productForm.controls.totalUnits.errors && productForm.controls.totalUnits.touched">
                 <span *ngIf="productForm.controls.totalUnits.errors?.['required']">Las unidades vendidas es obligatorio</span>
                 <span *ngIf="productForm.controls.totalUnits.errors?.['min']">Las unidades vendidas deber ser minimo cero</span>
             </div>
             
             <ion-button expand="block" mode="ios" class="submit" type="submit" [disabled]="productForm.invalid">
-                Agregar producto
+                {{ product ? 'Actualizar producto': 'Agregar producto' }}
                 <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>
             </ion-button>
         </form>

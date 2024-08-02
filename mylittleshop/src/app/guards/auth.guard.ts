@@ -19,8 +19,8 @@ export class AuthGard implements CanActivate{
           if(user)
             resolve(true);
         }else{
-            this.router.navigateByUrl('/auth')
-            resolve(false);
+          this.fbS.singOut()
+          resolve(false);
         }
       })
     })
